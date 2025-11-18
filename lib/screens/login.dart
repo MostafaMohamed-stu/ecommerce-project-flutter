@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_20/providers/authprovider.dart';
+import 'package:flutter_application_20/screens/homescreen.dart';
 import 'package:flutter_application_20/screens/signup.dart';
 import 'package:flutter_application_20/widgets/textfieldwidget.dart';
 import 'package:provider/provider.dart';
@@ -24,45 +25,54 @@ class LoginPage extends StatelessWidget {
               iconData: Icons.email,
               showpass: false,
               vald: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Email is required";
-                  }
-              }
+                if (value == null || value.isEmpty) {
+                  return "Email is required";
+                }
+              },
             ),
             TextFieldWidget(
               controller: passwordcontroller,
               label: 'Password',
               iconData: Icons.password,
               showpass: true,
-              vald:  (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Password is required";
-                  }
-              }
+              vald: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Password is required";
+                }
+              },
             ),
             SizedBox(height: 20),
-        
+
             ElevatedButton(
               onPressed: () async {
-                if(formkey.currentState!.validate())
-                {
-                await provider.login(
-                  email: emailcontroller.text,
-                  password: passwordcontroller.text,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(provider.authModel?.messege ?? ''),
-                      ),
-                );
+                if (formkey.currentState!.validate()) {
+                  await provider.login(
+                    email: emailcontroller.text,
+                    password: passwordcontroller.text,
+                  );
+                  if (provider.authModel?.messege == 'Login successful' &&
+                      provider.authModel?.id != -1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen(userId: provider.authModel!.id)),
+                    );
+                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(provider.authModel?.messege ?? '')),
+                  );
                 }
               },
               child: Text("Login "),
             ),
-            TextButton(onPressed: ()
-            {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUpPage()));
-            }, child: Text("Don't Have An Account? Sign-up"))
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignUpPage()),
+                );
+              },
+              child: Text("Don't Have An Account? Sign-up"),
+            ),
           ],
         ),
       ),

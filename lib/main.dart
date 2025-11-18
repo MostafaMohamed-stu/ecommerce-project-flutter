@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_20/providers/authprovider.dart';
+import 'package:flutter_application_20/providers/cartprovider.dart';
+import 'package:flutter_application_20/providers/productprovider.dart';
 import 'package:flutter_application_20/screens/login.dart';
 import 'package:provider/provider.dart';
 
@@ -12,12 +14,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => AuthProvider(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (BuildContext context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => ProductProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => CartProvider(),
+        ),
+      ],
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: LoginPage()),
     );
   }
 }
